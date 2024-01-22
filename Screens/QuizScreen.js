@@ -38,7 +38,6 @@ const QuizScreen = () => {
   );
 };
 
-export default QuizScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -59,3 +58,5 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
 });
+
+export default QuizScreen;
