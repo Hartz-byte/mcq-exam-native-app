@@ -3,14 +3,14 @@ import React from "react";
 
 const QuizScreen = () => {
   return (
-    <View>
+    <View style={styles.mainContainer}>
       {/* question section */}
-      <View>
+      <View style={styles.question}>
         <Text>Question</Text>
       </View>
 
       {/* options section */}
-      <View>
+      <View style={styles.options}>
         <TouchableOpacity>
           <Text>Option 1</Text>
         </TouchableOpacity>
@@ -26,7 +26,7 @@ const QuizScreen = () => {
       </View>
 
       {/* skip/next button section */}
-      <View>
+      <View style={styles.buttons}>
         <TouchableOpacity>
           <Text>SKIP</Text>
         </TouchableOpacity>
@@ -40,4 +40,22 @@ const QuizScreen = () => {
 
 export default QuizScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  mainContainer: {
+    padding: 12,
+    height: "100%",
+  },
+  question: {
+    marginVertical: 16,
+  },
+  options: {
+    marginVertical: 16,
+    flex: 1,
+  },
+  buttons: {
+    marginBottom: 12,
+    paddingVertical: 16,
+    justifyContent: "space-between",
+    flexDirection: "row",
+  },
+});
