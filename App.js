@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import HomeScreen from "./Screens/HomeScreen";
+import QuizScreen from "./Screens/QuizScreen";
 
 const App = () => {
   return (
     <View style={styles.mainContainer}>
-      <HomeScreen />
+      {/* <HomeScreen /> */}
+      <QuizScreen />
     </View>
   );
 };

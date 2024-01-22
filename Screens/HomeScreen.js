@@ -5,9 +5,10 @@ import HomeScreenTitle from "../Components/HomeScreenTitle";
 const HomeScreen = () => {
   return (
     <View>
-      {/* Home screen title component */}
+      {/* home screen title component */}
       <HomeScreenTitle />
 
+      {/* logo image */}
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}
@@ -16,7 +17,10 @@ const HomeScreen = () => {
         />
       </View>
 
-      <TouchableOpacity></TouchableOpacity>
+      {/* start button */}
+      <TouchableOpacity>
+        <Text>Start Quiz!!</Text>
+      </TouchableOpacity>
     </View>
   );
 };
