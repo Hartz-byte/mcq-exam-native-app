@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-// options shuffle logic
+// function to shuffle options array
 const optionsShuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -15,13 +15,15 @@ const QuizScreen = ({ navigation }) => {
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [timer, setTimer] = useState(10);
 
-  // api fetch for quiz questions
+  // fetch questions from API
   const getQuiz = async () => {
     const url =
       "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986";
     const res = await fetch(url);
     const data = await res.json();
+
     setQuestions(data.results);
     setOptions(getOptions(data.results[0]));
     setLoading(false);
@@ -31,41 +33,67 @@ const QuizScreen = ({ navigation }) => {
     getQuiz();
   }, []);
 
-  // next btn press logic
-  const handleNextPress = () => {
-    setQuesNo(quesNo + 1);
-    setOptions(getOptions(questions[quesNo + 1]));
-  };
-
-  // getting all options in a single array
+  // get options and shuffle them
   const getOptions = (ques) => {
-    const options = [...ques.incorrect_answers];
-    options.push(ques.correct_answer);
-
+    const options = [...ques.incorrect_answers, ques.correct_answer];
     optionsShuffle(options);
-
     return options;
   };
 
-  // option selection logic
-  const selectedOption = (opt) => {
-    // calculating the score
-    if (opt === questions[quesNo].correct_answer) {
-      setScore(score + 1);
-    }
+  // timer logic
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
+      if (timer === 0) handleTimeout();
+    }, 1000);
 
-    // moving to the next question
+    // clear the timer when the question changes
+    return () => clearInterval(timerInterval);
+  }, [timer, quesNo]);
+
+  // reset timer on a new question
+  useEffect(() => {
+    setTimer(10);
+  }, [quesNo, questions]);
+
+  // function to handle when timer runs out
+  const handleTimeout = () => {
     if (quesNo !== 9) {
       setQuesNo(quesNo + 1);
       setOptions(getOptions(questions[quesNo + 1]));
     }
+    if (quesNo === 9) {
+      submitHandle();
+    }
   };
 
-  // submit btn press logic
+  // function to handle next button press
+  const handleNextPress = () => {
+    if (quesNo !== 9) {
+      setQuesNo(quesNo + 1);
+      setOptions(getOptions(questions[quesNo + 1]));
+    } else {
+      navigation.navigate("Result", { score });
+    }
+  };
+
+  // option selection function
+  const selectedOption = (opt) => {
+    if (opt === questions[quesNo].correct_answer) {
+      setScore(score + 1);
+    }
+    if (quesNo !== 9) {
+      setQuesNo(quesNo + 1);
+      setOptions(getOptions(questions[quesNo + 1]));
+    }
+    if (quesNo === 9) {
+      submitHandle();
+    }
+  };
+
+  // function to handle submit press button
   const submitHandle = () => {
-    navigation.navigate("Result", {
-      score: score,
-    });
+    navigation.navigate("Result", { score });
   };
 
   return (
@@ -80,48 +108,31 @@ const QuizScreen = ({ navigation }) => {
             {/* question section */}
             <View style={styles.topSection}>
               <Text style={styles.question}>
-                Q. {decodeURIComponent(questions[quesNo].question)}
+                {quesNo} {decodeURIComponent(questions[quesNo].question)}
               </Text>
             </View>
 
             {/* options section */}
             <View style={styles.options}>
-              <TouchableOpacity
-                style={styles.optionBtn}
-                onPress={() => selectedOption(options[0])}
-              >
-                <Text style={styles.option}>
-                  {decodeURIComponent(options[0])}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.optionBtn}
-                onPress={() => selectedOption(options[1])}
-              >
-                <Text style={styles.option}>
-                  {decodeURIComponent(options[1])}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.optionBtn}
-                onPress={() => selectedOption(options[2])}
-              >
-                <Text style={styles.option}>
-                  {decodeURIComponent(options[2])}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.optionBtn}
-                onPress={() => selectedOption(options[3])}
-              >
-                <Text style={styles.option}>
-                  {decodeURIComponent(options[3])}
-                </Text>
-              </TouchableOpacity>
+              {options.map((opt, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.optionBtn}
+                  onPress={() => selectedOption(opt)}
+                >
+                  <Text style={styles.option}>{decodeURIComponent(opt)}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            {/* timer section */}
+            <View style={styles.timerContainer}>
+              <Text style={styles.timerText}>{timer}s</Text>
             </View>
 
             {/* buttons section */}
             <View style={styles.bottomSection}>
+              {/* skip button */}
               {quesNo !== 9 && (
                 <TouchableOpacity
                   style={styles.button}
@@ -131,6 +142,7 @@ const QuizScreen = ({ navigation }) => {
                 </TouchableOpacity>
               )}
 
+              {/* submit button */}
               {quesNo === 9 && (
                 <TouchableOpacity style={styles.button} onPress={submitHandle}>
                   <Text style={styles.btnText}>SUBMIT</Text>
@@ -197,6 +209,15 @@ const styles = StyleSheet.create({
   },
   parent: {
     height: "100%",
+  },
+  timerContainer: {
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  timerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "red",
   },
 });
 

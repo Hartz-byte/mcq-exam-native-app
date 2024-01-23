@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import HomeScreenTitle from "../Components/HomeScreenTitle";
 
@@ -20,7 +20,7 @@ const ResultScreen = ({ navigation, route }) => {
         <Text style={styles.scoreText}>Score: {score}/10</Text>
       </View>
 
-      {/* button */}
+      {/* home return button */}
       <View>
         <TouchableOpacity
           style={styles.button}
