@@ -5,8 +5,8 @@ import HomeScreenTitle from "../Components/HomeScreenTitle";
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      {/* home screen title component */}
-      <HomeScreenTitle />
+      {/* top screen title component */}
+      <HomeScreenTitle titleText="Random Quiz"/>
 
       {/* logo image */}
       <View style={styles.logoContainer}>

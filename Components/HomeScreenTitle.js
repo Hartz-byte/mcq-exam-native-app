@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const HomeScreenTitle = () => {
+const HomeScreenTitle = ({ titleText }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Random Quiz!!</Text>
+      <Text style={styles.title}>{titleText}!!</Text>
     </View>
   );
 };

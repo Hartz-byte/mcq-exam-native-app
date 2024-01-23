@@ -14,6 +14,7 @@ const QuizScreen = ({ navigation }) => {
   const [quesNo, setQuesNo] = useState(0);
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   // api fetch for quiz questions
   const getQuiz = async () => {
@@ -23,6 +24,7 @@ const QuizScreen = ({ navigation }) => {
     const data = await res.json();
     setQuestions(data.results);
     setOptions(getOptions(data.results[0]));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -68,66 +70,75 @@ const QuizScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {questions && (
-        <View style={styles.parent}>
-          {/* question section */}
-          <View style={styles.topSection}>
-            <Text style={styles.question}>
-              Q. {decodeURIComponent(questions[quesNo].question)}
-            </Text>
-          </View>
-
-          {/* options section */}
-          <View style={styles.options}>
-            <TouchableOpacity
-              style={styles.optionBtn}
-              onPress={() => selectedOption(options[0])}
-            >
-              <Text style={styles.option}>
-                {decodeURIComponent(options[0])}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.optionBtn}
-              onPress={() => selectedOption(options[1])}
-            >
-              <Text style={styles.option}>
-                {decodeURIComponent(options[1])}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.optionBtn}
-              onPress={() => selectedOption(options[2])}
-            >
-              <Text style={styles.option}>
-                {decodeURIComponent(options[2])}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.optionBtn}
-              onPress={() => selectedOption(options[3])}
-            >
-              <Text style={styles.option}>
-                {decodeURIComponent(options[3])}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* buttons section */}
-          <View style={styles.bottomSection}>
-            {quesNo !== 9 && (
-              <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-                <Text style={styles.btnText}>SKIP</Text>
-              </TouchableOpacity>
-            )}
-
-            {quesNo === 9 && (
-              <TouchableOpacity style={styles.button} onPress={submitHandle}>
-                <Text style={styles.btnText}>SUBMIT</Text>
-              </TouchableOpacity>
-            )}
-          </View>
+      {loading ? (
+        <View style={styles.loading}>
+          <Text style={styles.btnText}>Loading...</Text>
         </View>
+      ) : (
+        questions && (
+          <View style={styles.parent}>
+            {/* question section */}
+            <View style={styles.topSection}>
+              <Text style={styles.question}>
+                Q. {decodeURIComponent(questions[quesNo].question)}
+              </Text>
+            </View>
+
+            {/* options section */}
+            <View style={styles.options}>
+              <TouchableOpacity
+                style={styles.optionBtn}
+                onPress={() => selectedOption(options[0])}
+              >
+                <Text style={styles.option}>
+                  {decodeURIComponent(options[0])}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionBtn}
+                onPress={() => selectedOption(options[1])}
+              >
+                <Text style={styles.option}>
+                  {decodeURIComponent(options[1])}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionBtn}
+                onPress={() => selectedOption(options[2])}
+              >
+                <Text style={styles.option}>
+                  {decodeURIComponent(options[2])}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionBtn}
+                onPress={() => selectedOption(options[3])}
+              >
+                <Text style={styles.option}>
+                  {decodeURIComponent(options[3])}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* buttons section */}
+            <View style={styles.bottomSection}>
+              {quesNo !== 9 && (
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleNextPress}
+                >
+                  <Text style={styles.btnText}>SKIP</Text>
+                </TouchableOpacity>
+              )}
+
+              {quesNo === 9 && (
+                <TouchableOpacity style={styles.button} onPress={submitHandle}>
+                  <Text style={styles.btnText}>SUBMIT</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        )
       )}
     </View>
   );
@@ -138,6 +149,11 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 20,
     height: "100%",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
   topSection: {
     marginVertical: 16,
