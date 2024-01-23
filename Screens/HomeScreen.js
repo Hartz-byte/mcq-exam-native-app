@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import HomeScreenTitle from "../Components/HomeScreenTitle";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   return (
     <View>
       {/* home screen title component */}
@@ -17,8 +17,8 @@ const HomeScreen = () => {
         />
       </View>
 
-      {/* start button */}
-      <TouchableOpacity>
+      {/* quiz start button */}
+      <TouchableOpacity onPress={() => navigation.navigate("Quiz")}>
         <Text>Start Quiz!!</Text>
       </TouchableOpacity>
     </View>

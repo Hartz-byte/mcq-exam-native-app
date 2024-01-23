@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 
-const ResultScreen = () => {
+const ResultScreen = ({ navigation }) => {
   return (
     <View>
       {/* result text */}
@@ -20,14 +20,13 @@ const ResultScreen = () => {
 
       {/* button */}
       <View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Text>Home</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   logo: {
