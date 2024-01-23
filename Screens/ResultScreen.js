@@ -3,7 +3,7 @@ import React from "react";
 
 const ResultScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={styles.container}>
       {/* result text */}
       <View>
         <Text>Result</Text>
@@ -29,12 +29,14 @@ const ResultScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    height: "100%",
+  },
   logo: {
     width: 200,
     height: 200,
-  },
-  logoContainer: {
-    marginLeft: "23%",
   },
 });
 

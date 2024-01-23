@@ -22,7 +22,7 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("Quiz")}
         style={styles.button}
       >
-        <Text style={styles.btntext}>Start Quiz!</Text>
+        <Text style={styles.btnText}>Start Quiz!</Text>
       </TouchableOpacity>
     </View>
   );
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
   },
-  btntext: {
+  btnText: {
     fontSize: 24,
     fontWeight: "600",
     color: "white",

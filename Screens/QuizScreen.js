@@ -1,64 +1,108 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 const QuizScreen = ({ navigation }) => {
+  const [questions, setQuestions] = useState();
+  const [quesNo, setQuesNo] = useState(0);
+
+  const getQuiz = async () => {
+    const url = "https://opentdb.com/api.php?amount=10&type=multiple";
+    const res = await fetch(url);
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
-    <View style={styles.mainContainer}>
-      {/* question section */}
-      <View style={styles.question}>
-        <Text>Question</Text>
-      </View>
+    <View style={styles.container}>
+      {questions && (
+        <View style={styles.parent}>
+          {/* question section */}
+          <View style={styles.topSection}>
+            <Text style={styles.question}>Question</Text>
+          </View>
 
-      {/* options section */}
-      <View style={styles.options}>
-        <TouchableOpacity>
-          <Text>Option 1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Option 2</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Option 3</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>Option 4</Text>
-        </TouchableOpacity>
-      </View>
+          {/* options section */}
+          <View style={styles.options}>
+            <TouchableOpacity style={styles.optionBtn}>
+              <Text style={styles.option}>Option 1</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionBtn}>
+              <Text style={styles.option}>Option 2</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionBtn}>
+              <Text style={styles.option}>Option 3</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.optionBtn}>
+              <Text style={styles.option}>Option 4</Text>
+            </TouchableOpacity>
+          </View>
 
-      {/* skip/next button section */}
-      <View style={styles.buttons}>
-        <TouchableOpacity>
-          <Text>SKIP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text>NEXT</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Result")}>
-          <Text>END</Text>
-        </TouchableOpacity>
-      </View>
+          {/* buttons section */}
+          <View style={styles.bottomSection}>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.btnText}>SKIP</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.btnText}>NEXT</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={() => navigation.navigate("Result")}>
+              <Text>SUBMIT</Text>
+            </TouchableOpacity> */}
+          </View>
+        </View>
+      )}
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
-  mainContainer: {
-    padding: 12,
+  container: {
+    paddingTop: 50,
+    paddingHorizontal: 20,
     height: "100%",
   },
-  question: {
+  topSection: {
     marginVertical: 16,
+  },
+  question: {
+    fontSize: 30,
   },
   options: {
     marginVertical: 16,
     flex: 1,
   },
-  buttons: {
+  option: {
+    fontSize: 18,
+    fontWeight: "500",
+    color: "white",
+  },
+  optionBtn: {
+    padding: 12,
+    marginVertical: 6,
+    backgroundColor: "#34A0A4",
+    borderRadius: 12,
+  },
+  bottomSection: {
     marginBottom: 12,
     paddingVertical: 16,
     justifyContent: "space-between",
     flexDirection: "row",
+  },
+  button: {
+    backgroundColor: "#1A759F",
+    padding: 12,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  btnText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "white",
+  },
+  parent: {
+    height: "100%",
   },
 });
 
