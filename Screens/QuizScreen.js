@@ -178,6 +178,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  loadingText: {
+    fontSize: 30,
+    fontWeight: "600",
+    marginTop: 100,
+  },
   topSection: {
     marginVertical: 16,
   },
@@ -217,10 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "white",
-  },
-  loadingText: {
-    fontSize: 18,
-    fontWeight: "600",
   },
   parent: {
     height: "100%",
