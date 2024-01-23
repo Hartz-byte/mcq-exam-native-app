@@ -4,7 +4,7 @@ import HomeScreenTitle from "../Components/HomeScreenTitle";
 
 const HomeScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={styles.container}>
       {/* home screen title component */}
       <HomeScreenTitle />
 
@@ -18,20 +18,43 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       {/* quiz start button */}
-      <TouchableOpacity onPress={() => navigation.navigate("Quiz")}>
-        <Text>Start Quiz!!</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Quiz")}
+        style={styles.button}
+      >
+        <Text style={styles.btntext}>Start Quiz!</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    height: "100%",
+  },
+  logoContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    flex: 1,
+  },
   logo: {
     width: 200,
     height: 200,
   },
-  logoContainer: {
-    marginLeft: "23%",
+  button: {
+    width: "100%",
+    backgroundColor: "#1A759F",
+    padding: 16,
+    borderRadius: 16,
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  btntext: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "white",
   },
 });
 

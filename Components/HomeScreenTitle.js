@@ -3,12 +3,22 @@ import React from "react";
 
 const HomeScreenTitle = () => {
   return (
-    <View>
-      <Text>Random Quiz!!</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Random Quiz!!</Text>
     </View>
   );
 };
 
-export default HomeScreenTitle;
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 36,
+    fontWeight: "600",
+  },
+  container: {
+    paddingVertical: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
-const styles = StyleSheet.create({});
+export default HomeScreenTitle;
