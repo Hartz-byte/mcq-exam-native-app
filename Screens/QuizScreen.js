@@ -1,7 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-const questionShuffle = (array) => {
+// options shuffle logic
+const optionsShuffle = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -12,6 +13,7 @@ const QuizScreen = ({ navigation }) => {
   const [questions, setQuestions] = useState();
   const [quesNo, setQuesNo] = useState(0);
   const [options, setOptions] = useState([]);
+  const [score, setScore] = useState(0);
 
   // api fetch for quiz questions
   const getQuiz = async () => {
@@ -27,18 +29,41 @@ const QuizScreen = ({ navigation }) => {
     getQuiz();
   }, []);
 
+  // next btn press logic
   const handleNextPress = () => {
     setQuesNo(quesNo + 1);
     setOptions(getOptions(questions[quesNo + 1]));
   };
 
+  // getting all options in a single array
   const getOptions = (ques) => {
     const options = [...ques.incorrect_answers];
     options.push(ques.correct_answer);
 
-    questionShuffle(options);
+    optionsShuffle(options);
 
     return options;
+  };
+
+  // option selection logic
+  const selectedOption = (opt) => {
+    // calculating the score
+    if (opt === questions[quesNo].correct_answer) {
+      setScore(score + 1);
+    }
+
+    // moving to the next question
+    if (quesNo !== 9) {
+      setQuesNo(quesNo + 1);
+      setOptions(getOptions(questions[quesNo + 1]));
+    }
+  };
+
+  // submit btn press logic
+  const submitHandle = () => {
+    navigation.navigate("Result", {
+      score: score,
+    });
   };
 
   return (
@@ -54,22 +79,34 @@ const QuizScreen = ({ navigation }) => {
 
           {/* options section */}
           <View style={styles.options}>
-            <TouchableOpacity style={styles.optionBtn}>
+            <TouchableOpacity
+              style={styles.optionBtn}
+              onPress={() => selectedOption(options[0])}
+            >
               <Text style={styles.option}>
                 {decodeURIComponent(options[0])}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionBtn}>
+            <TouchableOpacity
+              style={styles.optionBtn}
+              onPress={() => selectedOption(options[1])}
+            >
               <Text style={styles.option}>
                 {decodeURIComponent(options[1])}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionBtn}>
+            <TouchableOpacity
+              style={styles.optionBtn}
+              onPress={() => selectedOption(options[2])}
+            >
               <Text style={styles.option}>
                 {decodeURIComponent(options[2])}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.optionBtn}>
+            <TouchableOpacity
+              style={styles.optionBtn}
+              onPress={() => selectedOption(options[3])}
+            >
               <Text style={styles.option}>
                 {decodeURIComponent(options[3])}
               </Text>
@@ -78,18 +115,14 @@ const QuizScreen = ({ navigation }) => {
 
           {/* buttons section */}
           <View style={styles.bottomSection}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.btnText}>SKIP</Text>
-            </TouchableOpacity>
-
             {quesNo !== 9 && (
               <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-                <Text style={styles.btnText}>NEXT</Text>
+                <Text style={styles.btnText}>SKIP</Text>
               </TouchableOpacity>
             )}
 
             {quesNo === 9 && (
-              <TouchableOpacity style={styles.button} onPress={() => null}>
+              <TouchableOpacity style={styles.button} onPress={submitHandle}>
                 <Text style={styles.btnText}>SUBMIT</Text>
               </TouchableOpacity>
             )}
