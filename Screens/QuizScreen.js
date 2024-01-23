@@ -1,9 +1,17 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
+const questionShuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+};
+
 const QuizScreen = ({ navigation }) => {
   const [questions, setQuestions] = useState();
   const [quesNo, setQuesNo] = useState(0);
+  const [options, setOptions] = useState([]);
 
   // api fetch for quiz questions
   const getQuiz = async () => {
@@ -12,6 +20,7 @@ const QuizScreen = ({ navigation }) => {
     const res = await fetch(url);
     const data = await res.json();
     setQuestions(data.results);
+    setOptions(getOptions(data.results[0]));
   };
 
   useEffect(() => {
@@ -20,6 +29,16 @@ const QuizScreen = ({ navigation }) => {
 
   const handleNextPress = () => {
     setQuesNo(quesNo + 1);
+    setOptions(getOptions(questions[quesNo + 1]));
+  };
+
+  const getOptions = (ques) => {
+    const options = [...ques.incorrect_answers];
+    options.push(ques.correct_answer);
+
+    questionShuffle(options);
+
+    return options;
   };
 
   return (
@@ -36,16 +55,24 @@ const QuizScreen = ({ navigation }) => {
           {/* options section */}
           <View style={styles.options}>
             <TouchableOpacity style={styles.optionBtn}>
-              <Text style={styles.option}>Option 1</Text>
+              <Text style={styles.option}>
+                {decodeURIComponent(options[0])}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn}>
-              <Text style={styles.option}>Option 2</Text>
+              <Text style={styles.option}>
+                {decodeURIComponent(options[1])}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn}>
-              <Text style={styles.option}>Option 3</Text>
+              <Text style={styles.option}>
+                {decodeURIComponent(options[2])}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.optionBtn}>
-              <Text style={styles.option}>Option 4</Text>
+              <Text style={styles.option}>
+                {decodeURIComponent(options[3])}
+              </Text>
             </TouchableOpacity>
           </View>
 
