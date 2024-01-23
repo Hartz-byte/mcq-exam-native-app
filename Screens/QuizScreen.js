@@ -33,7 +33,7 @@ const QuizScreen = ({ navigation }) => {
     getQuiz();
   }, []);
 
-  // get options and shuffle them
+  // get options as an array and shuffle them
   const getOptions = (ques) => {
     const options = [...ques.incorrect_answers, ques.correct_answer];
     optionsShuffle(options);
@@ -42,13 +42,13 @@ const QuizScreen = ({ navigation }) => {
 
   // timer logic
   useEffect(() => {
-    const timerInterval = setInterval(() => {
+    const timeInterval = setInterval(() => {
       setTimer((prevTimer) => (prevTimer > 0 ? prevTimer - 1 : 0));
       if (timer === 0) handleTimeout();
     }, 1000);
 
     // clear the timer when the question changes
-    return () => clearInterval(timerInterval);
+    return () => clearInterval(timeInterval);
   }, [timer, quesNo]);
 
   // reset timer on a new question
@@ -58,10 +58,12 @@ const QuizScreen = ({ navigation }) => {
 
   // function to handle when timer runs out
   const handleTimeout = () => {
+    // changes to next question
     if (quesNo !== 9) {
       setQuesNo(quesNo + 1);
       setOptions(getOptions(questions[quesNo + 1]));
     }
+    // changes the screen to result screen
     if (quesNo === 9) {
       submitHandle();
     }
@@ -69,23 +71,30 @@ const QuizScreen = ({ navigation }) => {
 
   // function to handle next button press
   const handleNextPress = () => {
+    // changes to next question
     if (quesNo !== 9) {
       setQuesNo(quesNo + 1);
       setOptions(getOptions(questions[quesNo + 1]));
-    } else {
+    }
+    // changes the screen to result screen with score value
+    else {
       navigation.navigate("Result", { score });
     }
   };
 
   // option selection function
   const selectedOption = (opt) => {
+    // +1 score for correct
     if (opt === questions[quesNo].correct_answer) {
       setScore(score + 1);
     }
+
+    // changes to next question
     if (quesNo !== 9) {
       setQuesNo(quesNo + 1);
       setOptions(getOptions(questions[quesNo + 1]));
     }
+    // changes the screen to result screen
     if (quesNo === 9) {
       submitHandle();
     }
@@ -93,27 +102,29 @@ const QuizScreen = ({ navigation }) => {
 
   // function to handle submit press button
   const submitHandle = () => {
-    navigation.navigate("Result", { score });
+    navigation.navigate("Result", { score, questions });
   };
 
   return (
     <View style={styles.container}>
+      {/* loading check */}
       {loading ? (
         <View style={styles.loading}>
-          <Text style={styles.btnText}>Loading...</Text>
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
       ) : (
         questions && (
           <View style={styles.parent}>
-            {/* question section */}
+            {/* question display */}
             <View style={styles.topSection}>
               <Text style={styles.question}>
-                {quesNo} {decodeURIComponent(questions[quesNo].question)}
+                Q {quesNo}. {decodeURIComponent(questions[quesNo].question)}
               </Text>
             </View>
 
-            {/* options section */}
+            {/* options display */}
             <View style={styles.options}>
+              {/* mapping over "options" array */}
               {options.map((opt, index) => (
                 <TouchableOpacity
                   key={index}
@@ -125,7 +136,7 @@ const QuizScreen = ({ navigation }) => {
               ))}
             </View>
 
-            {/* timer section */}
+            {/* timer display */}
             <View style={styles.timerContainer}>
               <Text style={styles.timerText}>{timer}s</Text>
             </View>
@@ -206,6 +217,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "white",
+  },
+  loadingText: {
+    fontSize: 18,
+    fontWeight: "600",
   },
   parent: {
     height: "100%",

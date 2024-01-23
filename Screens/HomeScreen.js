@@ -6,9 +6,9 @@ const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* top screen title component */}
-      <HomeScreenTitle titleText="Random Quiz"/>
+      <HomeScreenTitle titleText="Random Quiz" />
 
-      {/* logo image */}
+      {/* image */}
       <View style={styles.logoContainer}>
         <Image
           style={styles.logo}

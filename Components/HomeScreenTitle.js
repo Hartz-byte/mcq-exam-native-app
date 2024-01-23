@@ -4,6 +4,7 @@ import React from "react";
 const HomeScreenTitle = ({ titleText }) => {
   return (
     <View style={styles.container}>
+      {/* text display through props */}
       <Text style={styles.title}>{titleText}!!</Text>
     </View>
   );
