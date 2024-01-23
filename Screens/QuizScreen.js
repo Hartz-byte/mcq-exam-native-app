@@ -1,15 +1,25 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const QuizScreen = ({ navigation }) => {
   const [questions, setQuestions] = useState();
   const [quesNo, setQuesNo] = useState(0);
 
+  // api fetch for quiz questions
   const getQuiz = async () => {
-    const url = "https://opentdb.com/api.php?amount=10&type=multiple";
+    const url =
+      "https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986";
     const res = await fetch(url);
     const data = await res.json();
-    console.log(data);
+    setQuestions(data.results);
+  };
+
+  useEffect(() => {
+    getQuiz();
+  }, []);
+
+  const handleNextPress = () => {
+    setQuesNo(quesNo + 1);
   };
 
   return (
@@ -18,7 +28,9 @@ const QuizScreen = ({ navigation }) => {
         <View style={styles.parent}>
           {/* question section */}
           <View style={styles.topSection}>
-            <Text style={styles.question}>Question</Text>
+            <Text style={styles.question}>
+              Q. {decodeURIComponent(questions[quesNo].question)}
+            </Text>
           </View>
 
           {/* options section */}
@@ -42,12 +54,18 @@ const QuizScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.button}>
               <Text style={styles.btnText}>SKIP</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.btnText}>NEXT</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity onPress={() => navigation.navigate("Result")}>
-              <Text>SUBMIT</Text>
-            </TouchableOpacity> */}
+
+            {quesNo !== 9 && (
+              <TouchableOpacity style={styles.button} onPress={handleNextPress}>
+                <Text style={styles.btnText}>NEXT</Text>
+              </TouchableOpacity>
+            )}
+
+            {quesNo === 9 && (
+              <TouchableOpacity style={styles.button} onPress={() => null}>
+                <Text style={styles.btnText}>SUBMIT</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
       )}
